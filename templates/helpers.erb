@@ -6,16 +6,22 @@ def gems; @gems end
 def diagnostics_recipes; @diagnostics_recipes end
 def diagnostics_prefs; @diagnostics_prefs end
 
-def say_custom(tag, text); say "\033[1m\033[36m" + tag.to_s.rjust(10) + "\033[0m" + "  #{text}" end
-def say_recipe(name); say "\033[1m\033[36m" + "recipe".rjust(10) + "\033[0m" + "  Running #{name} recipe..." end
-def say_wizard(text); say_custom(@current_recipe || 'composer', text) end
+def recipe_tag(s) @current_recipe || s end
+# https://github.com/wycats/thor/blob/master/lib/thor/shell/color.rb
+# https://github.com/wycats/thor/blob/master/lib/thor/shell/basic.rb
+# In Thor, a trailing space or false third argument prevents the newline.
+def say_tag(tag) say "#{tag.to_s.rjust 10}", [:bold, :cyan], false end
 
-def ask_wizard(question)
-  ask "\033[1m\033[36m" + (@current_recipe || "prompt").rjust(10) + "\033[1m\033[36m" + "  #{question}\033[0m"
-end
+def say_custom(tag, text, color=nil) say_tag tag; say text, color end
+def ask_custom(tag, text, color=nil) say_tag tag; ask text, color end
+def say_recipe(name) say_custom 'recipe', "Running #{name} recipe..." end
+def say_wizard(text, color=nil) say_custom recipe_tag('composer'), text,       color        end
+def ask_wizard(question)        ask_custom recipe_tag(  'prompt'), question, [:bold, :cyan] end
 
 def yes_wizard?(question)
-  answer = ask_wizard(question + " \033[33m(y/n)\033[0m")
+  say_tag(recipe_tag 'prompt')
+  say question, [:bold, :cyan], false
+  answer = ask '(y/n)', :yellow
   case answer.downcase
     when "yes", "y"
       true
@@ -51,6 +57,7 @@ def before_config(&block); @before_configs[@current_recipe] = block; end
 
 def copy_from(source, destination)
   begin
+# https://github.com/wycats/thor/blob/master/lib/thor/actions/file_manipulation.rb
     remove_file destination
     get source, destination
   rescue OpenURI::HTTPError
@@ -82,6 +89,7 @@ def copy_from_repo(filename, opts = {})
   begin
     remove_file destination_filename
     if (prefer :templates, 'haml') && (filename.include? 'views')
+# https://github.com/wycats/thor/blob/master/lib/thor/actions/create_file.rb
       create_file destination_filename, html_to_haml(repo + source_filename)
     elsif (prefer :templates, 'slim') && (filename.include? 'views')
       create_file destination_filename, html_to_slim(repo + source_filename)
