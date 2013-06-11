@@ -28,6 +28,7 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
 
     # >-------------------------------[ Migrations ]--------------------------------<
     generate 'migration AddStripeToUsers customer_id:string last_4_digits:string'
+    raise StandardError.new unless $?.to_i.zero?
     run 'bundle exec rake db:drop'
     raise StandardError.new unless $?.to_i.zero?
     run 'bundle exec rake db:migrate'
@@ -51,6 +52,7 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     # >-------------------------------[ Controllers ]--------------------------------<
     copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
     generate 'controller content silver gold platinum --skip-stylesheets --skip-javascripts'
+    raise StandardError.new unless $?.to_i.zero?
     copy_from_repo 'app/controllers/content_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/registrations_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/application_controller.rb', :repo => repo
@@ -58,6 +60,7 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
 
     # >-------------------------------[ Mailers ]--------------------------------<
     generate 'mailer UserMailer'
+    raise StandardError.new unless $?.to_i.zero?
     copy_from_repo 'app/mailers/user_mailer.rb', :repo => repo
 
     # >-------------------------------[ Views ]--------------------------------<
@@ -139,6 +142,7 @@ if prefer :railsapps, 'rails-recurly-subscription-saas'
 
     # >-------------------------------[ Migrations ]--------------------------------<
     generate 'migration AddRecurlyToUsers first_name:string last_name:string customer_id:string'
+    raise StandardError.new unless $?.to_i.zero?
     run 'bundle exec rake db:drop'
     raise StandardError.new unless $?.to_i.zero?
     run 'bundle exec rake db:migrate'
@@ -162,6 +166,7 @@ if prefer :railsapps, 'rails-recurly-subscription-saas'
     # >-------------------------------[ Controllers ]--------------------------------<
     copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
     generate 'controller content silver gold platinum --skip-stylesheets --skip-javascripts'
+    raise StandardError.new unless $?.to_i.zero?
     copy_from_repo 'app/controllers/content_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/registrations_controller.rb', :repo => repo
     copy_from_repo 'app/controllers/application_controller.rb', :repo => repo
@@ -170,6 +175,7 @@ if prefer :railsapps, 'rails-recurly-subscription-saas'
 
     # >-------------------------------[ Mailers ]--------------------------------<
     generate 'mailer UserMailer'
+    raise StandardError.new unless $?.to_i.zero?
     copy_from_repo 'app/mailers/user_mailer.rb', :repo => repo
 
     # >-------------------------------[ Views ]--------------------------------<

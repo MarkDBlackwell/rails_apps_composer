@@ -20,6 +20,7 @@ RUBY
   ### HOME_CONTROLLER ###
   if ['home_app','users_app','admin_app','subdomains_app'].include? prefs[:starter_app]
     generate(:controller, "home index")
+    raise StandardError.new unless $?.to_i.zero?
   end
   if ['users_app','admin_app','subdomains_app'].include? prefs[:starter_app]
     gsub_file 'app/controllers/home_controller.rb', /def index/, "def index\n    @users = User.all"

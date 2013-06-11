@@ -31,6 +31,7 @@ after_bundler do
   copy_from_repo 'app/assets/stylesheets/application-bootstrap.css.scss', :prefs => 'bootstrap'
   if prefer :bootstrap, 'less'
     generate 'bootstrap:install'
+    raise StandardError.new unless $?.to_i.zero?
     insert_into_file 'app/assets/stylesheets/bootstrap_and_overrides.css.less', "body { padding-top: 60px; }\n", :after => "@import \"twitter/bootstrap/bootstrap\";\n"
   elsif prefer :bootstrap, 'sass'
     insert_into_file 'app/assets/javascripts/application.js', "//= require bootstrap\n", :after => "jquery_ujs\n"

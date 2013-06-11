@@ -95,6 +95,7 @@ FILE
     run 'bundle exec rake db:migrate'
     raise StandardError.new unless $?.to_i.zero?
     generate 'devise_invitable user'
+    raise StandardError.new unless $?.to_i.zero?
   end
   ### APPLY DATABASE SEED ###
   unless prefer :orm, 'mongoid'

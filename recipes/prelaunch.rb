@@ -69,6 +69,7 @@ if prefer :railsapps, 'rails-prelaunch-signup'
     # >-------------------------------[ Mailers ]--------------------------------<
 
     generate 'mailer UserMailer'
+    raise StandardError.new unless $?.to_i.zero?
     copy_from_repo 'spec/mailers/user_mailer_spec.rb', :repo => repo
     copy_from_repo 'app/mailers/user_mailer.rb', :repo => repo
 

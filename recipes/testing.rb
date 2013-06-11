@@ -19,8 +19,10 @@ RUBY
   if prefer :unit_test, 'rspec'
     say_wizard "recipe installing RSpec"
     generate 'rspec:install'
+    raise StandardError.new unless $?.to_i.zero?
     copy_from_repo 'spec/spec_helper.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
     generate 'email_spec:steps'
+    raise StandardError.new unless $?.to_i.zero?
     inject_into_file 'spec/spec_helper.rb', "require 'email_spec'\n", :after => "require 'rspec/rails'\n"
     inject_into_file 'spec/spec_helper.rb', :after => "RSpec.configure do |config|\n" do <<-RUBY
   config.include(EmailSpec::Helpers)
@@ -77,6 +79,7 @@ RUBY
   if prefer :integration, 'cucumber'
     say_wizard "recipe installing Cucumber"
     generate "cucumber:install --capybara#{' --rspec' if prefer :unit_test, 'rspec'}#{' -D' if prefer :orm, 'mongoid'}"
+    raise StandardError.new unless $?.to_i.zero?
     # make it easy to run Cucumber for single features without adding "--require features" to the command line
     gsub_file 'config/cucumber.yml', /std_opts = "/, 'std_opts = "-r features/support/ -r features/step_definitions '
     create_file 'features/support/email_spec.rb' do <<-RUBY
@@ -90,7 +93,10 @@ RUBY
         "\n  DatabaseCleaner.orm = 'mongoid'"
       end
     end
-    generate 'fabrication:cucumber_steps' if prefer :fixtures, 'fabrication'
+    if prefer :fixtures, 'fabrication'
+      generate 'fabrication:cucumber_steps'
+      raise StandardError.new unless $?.to_i.zero?
+    end
   end
   ## TURNIP
   if prefer :integration, 'turnip'
@@ -102,6 +108,7 @@ RUBY
   if prefer :fixtures, 'machinist'
     say_wizard "generating blueprints file for 'machinist'"
     generate 'machinist:install'
+    raise StandardError.new unless $?.to_i.zero?
   end
   ### GUARD
   if prefer :continuous_testing, 'guard'

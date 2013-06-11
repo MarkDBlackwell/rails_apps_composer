@@ -147,8 +147,11 @@ raise StandardError.new unless $?.to_i.zero?
 after_bundler do
   copy_from_repo 'config/database-postgresql.yml', :prefs => 'postgresql'
   copy_from_repo 'config/database-mysql.yml', :prefs => 'mysql'
-  generate 'mongoid:config' if prefer :orm, 'mongoid'
-  remove_file 'config/database.yml' if prefer :orm, 'mongoid'
+  if prefer :orm, 'mongoid'
+    generate 'mongoid:config'
+    raise StandardError.new unless $?.to_i.zero?
+    remove_file 'config/database.yml'
+  end
   if prefer :database, 'postgresql'
     begin
       pg_username = ask_wizard("Username for PostgreSQL? (leave blank to use the app name)")
@@ -213,20 +216,26 @@ end # after_bundler
 ### GENERATORS ###
 after_bundler do
   ## Front-end Framework
-  generate 'foundation:install' if prefer :frontend, 'foundation'
+  if prefer :frontend, 'foundation'
+    generate 'foundation:install'
+    raise StandardError.new unless $?.to_i.zero?
+  end
   ## Form Builder
   if prefer :form_builder, 'simple_form'
     if prefer :frontend, 'bootstrap'
       say_wizard "recipe installing simple_form for use with Twitter Bootstrap"
       generate 'simple_form:install --bootstrap'
+      raise StandardError.new unless $?.to_i.zero?
     else
       say_wizard "recipe installing simple_form"
       generate 'simple_form:install'
+      raise StandardError.new unless $?.to_i.zero?
     end
   end
   ## Figaro Gem
   if prefs[:local_env_file]
     generate 'figaro:install'
+    raise StandardError.new unless $?.to_i.zero?
     gsub_file 'config/application.yml', /# PUSHER_.*\n/, ''
     gsub_file 'config/application.yml', /# STRIPE_.*\n/, ''
     prepend_to_file 'config/application.yml' do <<-FILE

@@ -8,8 +8,13 @@ after_bundler do
     # prevent logging of password_confirmation
     gsub_file 'config/application.rb', /:password/, ':password, :password_confirmation'
     generate 'devise:install'
-    generate 'devise_invitable:install' if prefer :devise_modules, 'invitable'
+    raise StandardError.new unless $?.to_i.zero?
+    if prefer :devise_modules, 'invitable'
+      generate 'devise_invitable:install'
+      raise StandardError.new unless $?.to_i.zero?
+    end
     generate 'devise user' # create the User model
+    raise StandardError.new unless $?.to_i.zero?
     if prefer :orm, 'mongoid'
       ## DEVISE AND MONGOID
       copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-devise/master/'
@@ -38,11 +43,13 @@ RUBY
       ## DEVISE AND ACTIVE RECORD
       unless prefer :railsapps, 'rails-recurly-subscription-saas'
         generate 'migration AddNameToUsers name:string'
+        raise StandardError.new unless $?.to_i.zero?
       end
       copy_from_repo 'app/models/user.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
       if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
         gsub_file 'app/models/user.rb', /:registerable,/, ":registerable, :confirmable,"
         generate 'migration AddConfirmableToUsers confirmation_token:string confirmed_at:datetime confirmation_sent_at:datetime unconfirmed_email:string'
+        raise StandardError.new unless $?.to_i.zero?
       end
     end
     ## DEVISE AND CUCUMBER
@@ -57,8 +64,9 @@ RUBY
     repo = 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
     copy_from_repo 'config/initializers/omniauth.rb', :repo => repo
     gsub_file 'config/initializers/omniauth.rb', /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
-    generate 'model User name:string email:string provider:string uid:string' unless prefer :orm, 'mongoid'
     unless prefer :orm, 'mongoid'
+      generate 'model User name:string email:string provider:string uid:string'
+      raise StandardError.new unless $?.to_i.zero?
       run 'bundle exec rake db:migrate'
       raise StandardError.new unless $?.to_i.zero?
     end
@@ -77,6 +85,7 @@ RUBY
   ### AUTHORIZATION ###
   if prefer :authorization, 'cancan'
     generate 'cancan:ability'
+    raise StandardError.new unless $?.to_i.zero?
     if prefer :starter_app, 'admin_app'
       # Limit access to the users#index page
       copy_from_repo 'app/models/ability.rb', :repo => 'https://raw.github.com/RailsApps/rails3-bootstrap-devise-cancan/master/'
@@ -85,8 +94,10 @@ RUBY
     end
     unless prefer :orm, 'mongoid'
       generate 'rolify:role Role User'
+      raise StandardError.new unless $?.to_i.zero?
     else
       generate 'rolify:role Role User mongoid'
+      raise StandardError.new unless $?.to_i.zero?
       # correct the generation of rolify 3.1 with mongoid
       # the call to rolify should be *after* the inclusion of mongoid
       # (see https://github.com/EppO/rolify/issues/61)
