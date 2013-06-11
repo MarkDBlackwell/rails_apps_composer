@@ -5,7 +5,7 @@ after_bundler do
   say_wizard "recipe running after 'bundle install'"
   ### APPLICATION_CONTROLLER ###
   if prefer :authentication, 'omniauth'
-    #copy_from_repo 'app/controllers/application_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+    #copy_from_repo 'app/controllers/application_controller.rb', :repo => (get_repo 'rails3-mongoid-omniauth')
     copy_from_repo 'app/controllers/application_controller-omniauth.rb', :prefs => 'omniauth'
   end
   if prefer :authorization, 'cancan'
@@ -28,30 +28,30 @@ RUBY
   case prefs[:starter_app]
     when 'users_app'
       if prefer :authentication, 'devise'
-        copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
+        copy_from_repo 'app/controllers/users_controller.rb', :repo => (get_repo 'rails3-devise-rspec-cucumber')
       elsif prefer :authentication, 'omniauth'
-        copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+        copy_from_repo 'app/controllers/users_controller.rb', :repo => (get_repo 'rails3-mongoid-omniauth')
       end
     when 'admin_app'
       if prefer :authentication, 'devise'
-        copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-bootstrap-devise-cancan/master/'
+        copy_from_repo 'app/controllers/users_controller.rb', :repo => (get_repo 'rails3-bootstrap-devise-cancan')
       elsif prefer :authentication, 'omniauth'
-        copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+        copy_from_repo 'app/controllers/users_controller.rb', :repo => (get_repo 'rails3-mongoid-omniauth')
       end
     when 'subdomains_app'
-      copy_from_repo 'app/controllers/users_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/'
+      copy_from_repo 'app/controllers/users_controller.rb', :repo => (get_repo 'rails3-subdomains')
   end
   ### SESSIONS_CONTROLLER ###
   if prefer :authentication, 'omniauth'
     filename = 'app/controllers/sessions_controller.rb'
-    copy_from_repo filename, :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+    copy_from_repo filename, :repo => (get_repo 'rails3-mongoid-omniauth')
     gsub_file filename, /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
     if prefer :authorization, 'cancan'
       inject_into_file filename, "    user.add_role :admin if User.count == 1 # make the first user an admin\n", :after => "session[:user_id] = user.id\n"
     end
   end
   ### PROFILES_CONTROLLER ###
-  copy_from_repo 'app/controllers/profiles_controller.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
+  copy_from_repo 'app/controllers/profiles_controller.rb', :repo => (get_repo 'rails3-subdomains') if prefer :starter_app, 'subdomains_app'
   ### GIT ###
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: controllers"' if prefer :git, true

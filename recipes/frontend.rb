@@ -14,7 +14,7 @@ after_bundler do
       when 'devise'
         copy_from_repo 'app/views/layouts/_navigation-cancan.html.erb', :prefs => 'cancan'
       when 'omniauth'
-        copy_from 'https://raw.github.com/RailsApps/rails-composer/master/files/app/views/layouts/_navigation-cancan-omniauth.html.erb', 'app/views/layouts/_navigation.html.erb'
+        copy_from "#{get_repo 'rails-composer'}app/views/layouts/_navigation-cancan-omniauth.html.erb", 'app/views/layouts/_navigation.html.erb'
     end
   else
     copy_from_repo 'app/views/layouts/_navigation-devise.html.erb', :prefs => 'devise'

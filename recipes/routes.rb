@@ -11,13 +11,13 @@ after_bundler do
   ### USER_ACCOUNTS ###
   if ['users_app','admin_app'].include? prefs[:starter_app]
     ## DEVISE
-    copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/' if prefer :authentication, 'devise'
+    copy_from_repo 'config/routes.rb', :repo => (get_repo 'rails3-devise-rspec-cucumber') if prefer :authentication, 'devise'
     ## OMNIAUTH
-    copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/' if prefer :authentication, 'omniauth'
+    copy_from_repo 'config/routes.rb', :repo => (get_repo 'rails3-mongoid-omniauth') if prefer :authentication, 'omniauth'
   end
   ### SUBDOMAINS ###
-  copy_from_repo 'lib/subdomain.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
-  copy_from_repo 'config/routes.rb', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
+  copy_from_repo 'lib/subdomain.rb', :repo => (get_repo 'rails3-subdomains') if prefer :starter_app, 'subdomains_app'
+  copy_from_repo 'config/routes.rb', :repo => (get_repo 'rails3-subdomains') if prefer :starter_app, 'subdomains_app'
   ### CORRECT APPLICATION NAME ###
   gsub_file 'config/routes.rb', /^.*.routes.draw do/, "#{app_const}.routes.draw do"
   ### GIT ###

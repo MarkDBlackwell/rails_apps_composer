@@ -19,7 +19,7 @@ RUBY
   if prefer :unit_test, 'rspec'
     say_wizard "recipe installing RSpec"
     generate 'rspec:install'
-    copy_from_repo 'spec/spec_helper.rb', :repo => 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
+    copy_from_repo 'spec/spec_helper.rb', :repo => (get_repo 'rails3-devise-rspec-cucumber')
     generate 'email_spec:steps'
     inject_into_file 'spec/spec_helper.rb', "require 'email_spec'\n", :after => "require 'rspec/rails'\n"
     inject_into_file 'spec/spec_helper.rb', :after => "RSpec.configure do |config|\n" do <<-RUBY
@@ -118,7 +118,7 @@ after_everything do
   if prefer :unit_test, 'rspec'
     if (prefer :authentication, 'devise') && (prefer :starter_app, 'users_app')
       say_wizard "copying RSpec files from the rails3-devise-rspec-cucumber examples"
-      repo = 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
+      repo = get_repo 'rails3-devise-rspec-cucumber'
       copy_from_repo 'spec/factories/users.rb', :repo => repo
       gsub_file 'spec/factories/users.rb', /# confirmed_at/, "confirmed_at" if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
       copy_from_repo 'spec/controllers/home_controller_spec.rb', :repo => repo
@@ -133,7 +133,7 @@ after_everything do
     end
     if (prefer :authentication, 'devise') && (prefer :starter_app, 'admin_app')
       say_wizard "copying RSpec files from the rails3-bootstrap-devise-cancan examples"
-      repo = 'https://raw.github.com/RailsApps/rails3-bootstrap-devise-cancan/master/'
+      repo = get_repo 'rails3-bootstrap-devise-cancan'
       copy_from_repo 'spec/factories/users.rb', :repo => repo
       gsub_file 'spec/factories/users.rb', /# confirmed_at/, "confirmed_at" if (prefer :devise_modules, 'confirmable') || (prefer :devise_modules, 'invitable')
       copy_from_repo 'spec/controllers/home_controller_spec.rb', :repo => repo
@@ -149,7 +149,7 @@ after_everything do
     ## RSPEC AND OMNIAUTH
     if (prefer :authentication, 'omniauth') && (prefer :starter_app, 'users_app')
       say_wizard "copying RSpec files from the rails3-mongoid-omniauth examples"
-      repo = 'https://raw.github.com/RailsApps/rails3-mongoid-omniauth/master/'
+      repo = get_repo 'rails3-mongoid-omniauth'
       copy_from_repo 'spec/factories/users.rb', :repo => repo
       copy_from_repo 'spec/controllers/sessions_controller_spec.rb', :repo => repo
       copy_from_repo 'spec/controllers/home_controller_spec.rb', :repo => repo
@@ -159,7 +159,7 @@ after_everything do
     ## SUBDOMAINS
     if (prefer :authentication, 'devise') && (prefer :starter_app, 'subdomains_app')
       say_wizard "copying RSpec files from the rails3-subdomains examples"
-      repo = 'https://raw.github.com/RailsApps/rails3-subdomains/master/'
+      repo = get_repo 'rails3-subdomains'
       copy_from_repo 'spec/factories/users.rb', :repo => repo
       copy_from_repo 'spec/controllers/home_controller_spec.rb', :repo => repo
       copy_from_repo 'spec/controllers/users_controller_spec.rb', :repo => repo
@@ -174,7 +174,7 @@ after_everything do
     ## CUCUMBER AND DEVISE (USERS APP)
     if (prefer :authentication, 'devise') && (prefer :starter_app, 'users_app')
       say_wizard "copying Cucumber scenarios from the rails3-devise-rspec-cucumber examples"
-      repo = 'https://raw.github.com/RailsApps/rails3-devise-rspec-cucumber/master/'
+      repo = get_repo 'rails3-devise-rspec-cucumber'
       copy_from_repo 'spec/controllers/home_controller_spec.rb', :repo => repo
       copy_from_repo 'features/users/sign_in.feature', :repo => repo
       copy_from_repo 'features/users/sign_out.feature', :repo => repo
@@ -200,7 +200,7 @@ RUBY
     ## CUCUMBER AND DEVISE (ADMIN APP)
     if (prefer :authentication, 'devise') && (prefer :starter_app, 'admin_app')
       say_wizard "copying Cucumber scenarios from the rails3-bootstrap-devise-cancan examples"
-      repo = 'https://raw.github.com/RailsApps/rails3-bootstrap-devise-cancan/master/'
+      repo = get_repo 'rails3-bootstrap-devise-cancan'
       copy_from_repo 'spec/controllers/home_controller_spec.rb', :repo => repo
       copy_from_repo 'features/users/sign_in.feature', :repo => repo
       copy_from_repo 'features/users/sign_out.feature', :repo => repo
@@ -226,7 +226,7 @@ RUBY
     ## CUCUMBER AND DEVISE (SUBDOMAINS APP)
     if (prefer :authentication, 'devise') && (prefer :starter_app, 'subdomains_app')
       say_wizard "copying RSpec files from the rails3-subdomains examples"
-      repo = 'https://raw.github.com/RailsApps/rails3-subdomains/master/'
+      repo = get_repo 'rails3-subdomains'
       copy_from_repo 'features/users/sign_in.feature', :repo => repo
       copy_from_repo 'features/users/sign_out.feature', :repo => repo
       copy_from_repo 'features/users/sign_up.feature', :repo => repo

@@ -40,7 +40,7 @@ FILE
     end
   end
   ### SUBDOMAINS ###
-  copy_from_repo 'config/application.yml', :repo => 'https://raw.github.com/RailsApps/rails3-subdomains/master/' if prefer :starter_app, 'subdomains_app'
+  copy_from_repo 'config/application.yml', :repo => (get_repo 'rails3-subdomains') if prefer :starter_app, 'subdomains_app'
   ### APPLICATION.EXAMPLE.YML ###
   if prefs[:local_env_file]
     copy_file destination_root + '/config/application.yml', destination_root + '/config/application.example.yml'

@@ -59,7 +59,7 @@ def copy_from(source, destination)
 end
 
 def copy_from_repo(filename, opts = {})
-  repo = 'https://raw.github.com/RailsApps/rails-composer/master/files/'
+  repo = "#{get_repo 'rails-composer'}files/"
   repo = opts[:repo] unless opts[:repo].nil?
   if (!opts[:prefs].nil?) && (!prefs.has_value? opts[:prefs])
     return
@@ -91,6 +91,16 @@ def copy_from_repo(filename, opts = {})
   rescue OpenURI::HTTPError
     say_wizard "Unable to obtain #{source_filename} from the repo #{repo}"
   end
+end
+
+# Returns a repository: https://raw.github.com/RailsApps/{place}/master/
+#
+def get_repo(place)
+  base_through_domain = 'https://raw.github.com/'
+  sub_uri = 'RailsApps'
+  starting_base = ENV['RAILS_APPS_STARTING_BASE'] || "#{base_through_domain}/#{sub_uri}"
+  branch = starting_base.start_with?('/') ? '' : 'master/' # Check for local directory.
+  "#{starting_base}/#{place}/#{branch}"
 end
 
 def html_to_haml(source)

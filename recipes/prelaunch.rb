@@ -5,7 +5,7 @@ if prefer :railsapps, 'rails-prelaunch-signup'
 
   after_everything do
     say_wizard "recipe running after 'bundle install'"
-    repo = 'https://raw.github.com/RailsApps/rails-prelaunch-signup/master/'
+    repo = get_repo 'rails-prelaunch-signup'
 
     # >-------------------------------[ Clean up starter app ]--------------------------------<
 
