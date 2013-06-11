@@ -13,7 +13,8 @@ class TemplateRunner
       template_file = File.open 'template.rb', 'w'
       template_file.write
       template_file.close
-      @output = `rails new #{@app_name} -m template.rb`
+      @output = run "rails new #{@app_name} -m template.rb"
+      raise StandardError.new unless $?.to_i.zero?
     end
     @output
   end

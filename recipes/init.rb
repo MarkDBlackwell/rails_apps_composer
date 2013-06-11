@@ -93,6 +93,7 @@ FILE
   ## DEVISE-INVITABLE
   if prefer :devise_modules, 'invitable'
     run 'bundle exec rake db:migrate'
+    raise StandardError.new unless $?.to_i.zero?
     generate 'devise_invitable user'
   end
   ### APPLY DATABASE SEED ###
@@ -100,15 +101,20 @@ FILE
     ## ACTIVE_RECORD
     say_wizard "applying migrations and seeding the database"
     run 'bundle exec rake db:migrate'
+    raise StandardError.new unless $?.to_i.zero?
     run 'bundle exec rake db:test:prepare'
+    raise StandardError.new unless $?.to_i.zero?
   else
     ## MONGOID
     say_wizard "dropping database, creating indexes and seeding the database"
     run 'bundle exec rake db:drop'
+    raise StandardError.new unless $?.to_i.zero?
     run 'bundle exec rake db:mongoid:create_indexes'
+    raise StandardError.new unless $?.to_i.zero?
   end
   unless prefer :railsapps, 'rails-recurly-subscription-saas'
     run 'bundle exec rake db:seed'
+    raise StandardError.new unless $?.to_i.zero?
   end
   ### GIT ###
   git :add => '-A' if prefer :git, true

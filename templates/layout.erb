@@ -112,8 +112,10 @@ end
 say_wizard "Installing gems. This will take a while."
 if prefs.has_key? :bundle_path
   run "bundle install --without production --path #{prefs[:bundle_path]}"
+  raise StandardError.new unless $?.to_i.zero?
 else
   run 'bundle install --without production'
+  raise StandardError.new unless $?.to_i.zero?
 end
 
 # >-----------------------------[ Run 'After Bundler' Callbacks ]-------------------------------<

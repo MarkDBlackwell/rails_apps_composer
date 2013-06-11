@@ -51,6 +51,7 @@ if prefs[:rvmrc]
       raise
     end
     run "rvm gemset list"
+    raise StandardError.new unless $?.to_i.zero?
     if File.exist?('.ruby-version')
       say_wizard ".ruby-version file already exists"
     else
@@ -147,17 +148,24 @@ if prefs[:github]
   gem 'hub', '>= 1.10.2', :require => nil, :group => [:development]
   after_everything do
     say_wizard "recipe creating GitHub repository"
-    git_uri = `git config remote.origin.url`.strip
+    git_uri = run('git config remote.origin.url').strip
+    raise StandardError.new unless $?.to_i.zero?
     unless git_uri.size == 0
       say_wizard "Repository already exists:"
       say_wizard "#{git_uri}"
     else
       run "hub create #{app_name}"
+      raise StandardError.new unless $?.to_i.zero?
       unless prefer :railsapps, 'rails-prelaunch-signup'
         run "hub push -u origin master"
+        raise StandardError.new unless $?.to_i.zero?
       else
         run "hub push -u origin #{prefs[:prelaunch_branch]}"
-        run "hub push -u origin #{prefs[:main_branch]}" unless prefer :main_branch, 'none'
+        raise StandardError.new unless $?.to_i.zero?
+        unless prefer :main_branch, 'none'
+          run "hub push -u origin #{prefs[:main_branch]}"
+          raise StandardError.new unless $?.to_i.zero?
+        end
       end
     end
   end

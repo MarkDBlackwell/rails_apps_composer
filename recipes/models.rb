@@ -58,7 +58,10 @@ RUBY
     copy_from_repo 'config/initializers/omniauth.rb', :repo => repo
     gsub_file 'config/initializers/omniauth.rb', /twitter/, prefs[:omniauth_provider] unless prefer :omniauth_provider, 'twitter'
     generate 'model User name:string email:string provider:string uid:string' unless prefer :orm, 'mongoid'
-    run 'bundle exec rake db:migrate' unless prefer :orm, 'mongoid'
+    unless prefer :orm, 'mongoid'
+      run 'bundle exec rake db:migrate'
+      raise StandardError.new unless $?.to_i.zero?
+    end
     copy_from_repo 'app/models/user.rb', :repo => repo  # copy the User model (Mongoid version)
     unless prefer :orm, 'mongoid'
       ## OMNIAUTH AND ACTIVE RECORD
@@ -85,7 +88,7 @@ RUBY
     else
       generate 'rolify:role Role User mongoid'
       # correct the generation of rolify 3.1 with mongoid
-      # the call to `rolify` should be *after* the inclusion of mongoid
+      # the call to rolify should be *after* the inclusion of mongoid
       # (see https://github.com/EppO/rolify/issues/61)
       # This isn't needed for rolify>=3.2.0.beta4, but should cause no harm
       gsub_file 'app/models/user.rb',

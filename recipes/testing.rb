@@ -28,6 +28,7 @@ RUBY
 RUBY
     end
     run 'rm -rf test/' # Removing test folder (not needed for RSpec)
+    raise StandardError.new unless $?.to_i.zero?
     inject_into_file 'config/application.rb', :after => "Rails::Application\n" do <<-RUBY
 
     # don't generate RSpec tests for views and helpers
@@ -106,6 +107,7 @@ RUBY
   if prefer :continuous_testing, 'guard'
     say_wizard "recipe initializing Guard"
     run 'bundle exec guard init'
+    raise StandardError.new unless $?.to_i.zero?
   end
   ### GIT ###
   git :add => '-A' if prefer :git, true

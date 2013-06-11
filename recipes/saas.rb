@@ -27,7 +27,9 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     # >-------------------------------[ Migrations ]--------------------------------<
     generate 'migration AddStripeToUsers customer_id:string last_4_digits:string'
     run 'bundle exec rake db:drop'
+    raise StandardError.new unless $?.to_i.zero?
     run 'bundle exec rake db:migrate'
+    raise StandardError.new unless $?.to_i.zero?
 
     # >-------------------------------[ Models ]--------------------------------<
     copy_from_repo 'app/models/ability.rb', :repo => repo
@@ -40,7 +42,9 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     copy_from_repo 'db/seeds.rb', :repo => repo
     copy_from_repo 'config/initializers/stripe.rb', :repo => repo
     run 'bundle exec rake db:seed'
+    raise StandardError.new unless $?.to_i.zero?
     run 'bundle exec rake db:test:prepare'
+    raise StandardError.new unless $?.to_i.zero?
 
     # >-------------------------------[ Controllers ]--------------------------------<
     copy_from_repo 'app/controllers/home_controller.rb', :repo => repo
@@ -130,7 +134,9 @@ if prefer :railsapps, 'rails-recurly-subscription-saas'
     # >-------------------------------[ Migrations ]--------------------------------<
     generate 'migration AddRecurlyToUsers first_name:string last_name:string customer_id:string'
     run 'bundle exec rake db:drop'
+    raise StandardError.new unless $?.to_i.zero?
     run 'bundle exec rake db:migrate'
+    raise StandardError.new unless $?.to_i.zero?
 
     # >-------------------------------[ Models ]--------------------------------<
     copy_from_repo 'app/models/ability.rb', :repo => repo
@@ -143,7 +149,9 @@ if prefer :railsapps, 'rails-recurly-subscription-saas'
     copy_from_repo 'db/seeds.rb', :repo => repo
     copy_from_repo 'config/initializers/recurly.rb', :repo => repo
     run 'bundle exec rake db:seed'
+    raise StandardError.new unless $?.to_i.zero?
     run 'bundle exec rake db:test:prepare'
+    raise StandardError.new unless $?.to_i.zero?
 
     # >-------------------------------[ Controllers ]--------------------------------<
     copy_from_repo 'app/controllers/home_controller.rb', :repo => repo

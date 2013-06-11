@@ -152,7 +152,10 @@ after_bundler do
       pg_username = ask_wizard("Username for PostgreSQL? (leave blank to use the app name)")
       if pg_username.blank?
         say_wizard "Creating a user named '#{app_name}' for PostgreSQL"
-        run "createuser #{app_name}" if prefer :database, 'postgresql'
+        if prefer :database, 'postgresql'
+          run "createuser #{app_name}"
+          raise StandardError.new unless $?.to_i.zero?
+        end
         gsub_file "config/database.yml", /username: .*/, "username: #{app_name}"
       else
         gsub_file "config/database.yml", /username: .*/, "username: #{pg_username}"
@@ -185,12 +188,19 @@ after_bundler do
     affirm = yes_wizard? "Drop any existing databases named #{app_name}?"
     if affirm
       run 'bundle exec rake db:drop'
+      raise StandardError.new unless $?.to_i.zero?
     else
       raise "aborted at user's request"
     end
   end
-  run 'bundle exec rake db:create:all' unless prefer :orm, 'mongoid'
-  run 'bundle exec rake db:create' if prefer :orm, 'mongoid'
+  unless prefer :orm, 'mongoid'
+    run 'bundle exec rake db:create:all'
+    raise StandardError.new unless $?.to_i.zero?
+  end
+  if prefer :orm, 'mongoid'
+    run 'bundle exec rake db:create'
+    raise StandardError.new unless $?.to_i.zero?
+  end
   ## Git
   git :add => '-A' if prefer :git, true
   git :commit => '-qm "rails_apps_composer: create database"' if prefer :git, true
