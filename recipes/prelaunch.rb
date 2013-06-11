@@ -22,7 +22,9 @@ if prefer :railsapps, 'rails-prelaunch-signup'
     gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
     # GIT
     git :add => '-A' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
     git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
 
     # >-------------------------------[ Create a git branch ]--------------------------------<
     if prefer :git, true
@@ -30,13 +32,16 @@ if prefer :railsapps, 'rails-prelaunch-signup'
         unless prefer :main_branch, 'none'
           say_wizard "renaming git branch 'master' to '#{prefs[:main_branch]}' for starter app"
           git :branch => "-m master #{prefs[:main_branch]}"
+          raise StandardError.new unless $?.to_i.zero?
           git :checkout => "-b master"
+          raise StandardError.new unless $?.to_i.zero?
         else
           say_wizard "creating prelaunch app on git branch 'master'"
         end
       else
         say_wizard "creating new git branch '#{prefs[:prelaunch_branch]}' for prelaunch app"
         git :checkout => "-b #{prefs[:prelaunch_branch]}"
+        raise StandardError.new unless $?.to_i.zero?
       end
     end
 
@@ -106,7 +111,9 @@ if prefer :railsapps, 'rails-prelaunch-signup'
 
     ### GIT ###
     git :add => '-A' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
     git :commit => '-qm "rails_apps_composer: prelaunch app"' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
   end # after_bundler
 end # rails-prelaunch-signup
 

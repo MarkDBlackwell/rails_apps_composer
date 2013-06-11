@@ -98,7 +98,9 @@ RUBY
   end
   ### GIT ###
   git :add => '-A' if prefer :git, true
+  raise StandardError.new unless $?.to_i.zero?
   git :commit => '-qm "rails_apps_composer: models"' if prefer :git, true
+  raise StandardError.new unless $?.to_i.zero?
 end # after_bundler
 
 __END__

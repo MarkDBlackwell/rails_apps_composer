@@ -137,7 +137,9 @@ after_everything do
   gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
   # GIT
   git :add => '-A' if prefer :git, true
+  raise StandardError.new unless $?.to_i.zero?
   git :commit => '-qm "rails_apps_composer: extras"' if prefer :git, true
+  raise StandardError.new unless $?.to_i.zero?
 end
 
 ## GITHUB

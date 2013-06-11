@@ -111,7 +111,9 @@ RUBY
   end
   ### GIT ###
   git :add => '-A' if prefer :git, true
+  raise StandardError.new unless $?.to_i.zero?
   git :commit => '-qm "rails_apps_composer: testing framework"' if prefer :git, true
+  raise StandardError.new unless $?.to_i.zero?
 end # after_bundler
 
 after_everything do
@@ -169,7 +171,9 @@ after_everything do
     end
     ## GIT
     git :add => '-A' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
     git :commit => '-qm "rails_apps_composer: rspec files"' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
   end
   ### CUCUMBER ###
   if prefer :integration, 'cucumber'
@@ -239,7 +243,9 @@ RUBY
     end
     ## GIT
     git :add => '-A' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
     git :commit => '-qm "rails_apps_composer: cucumber files"' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
   end
   ### FABRICATION ###
   if prefer :fixtures, 'fabrication'

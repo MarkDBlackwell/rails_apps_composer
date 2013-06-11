@@ -72,7 +72,9 @@ after_everything do
   gsub_file "README.textile", /Authorization: None/, "Authorization: CanCan" if prefer :authorization, 'cancan'
 
   git :add => '-A' if prefer :git, true
+  raise StandardError.new unless $?.to_i.zero?
   git :commit => '-qm "rails_apps_composer: add README files"' if prefer :git, true
+  raise StandardError.new unless $?.to_i.zero?
 
 end # after_everything
 

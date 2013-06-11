@@ -22,7 +22,9 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
     gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
     # GIT
     git :add => '-A' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
     git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
 
     # >-------------------------------[ Migrations ]--------------------------------<
     generate 'migration AddStripeToUsers customer_id:string last_4_digits:string'
@@ -104,7 +106,9 @@ if prefer :railsapps, 'rails-stripe-membership-saas'
 
     ### GIT ###
     git :add => '-A' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
     git :commit => '-qm "rails_apps_composer: membership app"' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
   end # after_bundler
 end # rails-stripe-membership-saas
 
@@ -129,7 +133,9 @@ if prefer :railsapps, 'rails-recurly-subscription-saas'
     gsub_file 'config/routes.rb', /\n^\s*\n/, "\n"
     # GIT
     git :add => '-A' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
     git :commit => '-qm "rails_apps_composer: clean up starter app"' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
 
     # >-------------------------------[ Migrations ]--------------------------------<
     generate 'migration AddRecurlyToUsers first_name:string last_name:string customer_id:string'
@@ -211,7 +217,9 @@ if prefer :railsapps, 'rails-recurly-subscription-saas'
 
     ### GIT ###
     git :add => '-A' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
     git :commit => '-qm "rails_apps_composer: membership app"' if prefer :git, true
+    raise StandardError.new unless $?.to_i.zero?
   end # after_bundler
 end # rails-recurly-subscription-saas
 

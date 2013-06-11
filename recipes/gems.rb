@@ -139,7 +139,9 @@ end
 
 ## Git
 git :add => '-A' if prefer :git, true
+raise StandardError.new unless $?.to_i.zero?
 git :commit => '-qm "rails_apps_composer: Gemfile"' if prefer :git, true
+raise StandardError.new unless $?.to_i.zero?
 
 ### CREATE DATABASE ###
 after_bundler do
@@ -203,7 +205,9 @@ after_bundler do
   end
   ## Git
   git :add => '-A' if prefer :git, true
+  raise StandardError.new unless $?.to_i.zero?
   git :commit => '-qm "rails_apps_composer: create database"' if prefer :git, true
+  raise StandardError.new unless $?.to_i.zero?
 end # after_bundler
 
 ### GENERATORS ###
@@ -238,7 +242,9 @@ FILE
   end
   ## Git
   git :add => '-A' if prefer :git, true
+  raise StandardError.new unless $?.to_i.zero?
   git :commit => '-qm "rails_apps_composer: generators"' if prefer :git, true
+  raise StandardError.new unless $?.to_i.zero?
 end # after_bundler
 
 __END__
